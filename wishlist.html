@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terra's Shop - Wishlist</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>Terra's Shop</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="men.html">Men</a>
+    <a href="women.html"> Women</a>
+    <a href="beauty.html"> Beauty</a>
+    <a href="cart.html">Cart</a>
+    <a href="wishlist.html"> Wishlist</a>
+    <a href="contact.html">Contact</a>
+    <a href="search.html">Search</a>
+  </nav>
+</header>
+
+<section>
+  <h2> Your Wishlist</h2>
+  <div id="wishlist-items"></div>
+</section>
+
+<script>
+// Load wishlist from localStorage
+let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+function showWishlist() {
+  const wishlistDiv = document.getElementById('wishlist-items');
+  if (wishlist.length === 0) {
+    wishlistDiv.innerHTML = "<p>Your wishlist is empty.</p>";
+    return;
+  }
+  wishlistDiv.innerHTML = "<ul>" + wishlist.map((item, index) => `
+    <li>
+      ${item.name} - $${item.price.toFixed(2)}
+      <button onclick="removeFromWishlist(${index})">Remove</button>
+      <button onclick="moveToCart(${index})">Add to Cart</button>
+    </li>
+  `).join('') + "</ul>";
+}
+
+function removeFromWishlist(index) {
+  wishlist.splice(index, 1);
+  localStorage.setItem('wishlist', JSON.stringify(wishlist));
+  showWishlist();
+}
+
+function moveToCart(index) {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  cart.push(wishlist[index]);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  removeFromWishlist(index);
+  alert("Moved to cart!");
+}
+
+showWishlist();
+</script>
+
+</body>
+</html>
